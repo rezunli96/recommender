@@ -94,12 +94,12 @@ def NDCG(k, u , X, Y):
     return dcg/norm
 
 
-def Precision(k, X, Y):
+def Precision(k, u, X, Y):
     x = X[:k]
     y = Y[:k]
     count = 0
     for i in x:
-        if i in y: count += 1
+        if test[i, u] == 5: count += 1
     return count/k
 
 
@@ -161,7 +161,7 @@ def Multi_Rank(k):
         ndcg = NDCG(5, u, r, true_rank[u])
         nd[u] = ndcg
         print("NDCG for "+str(u)+" : ", ndcg)
-        pre = Precision(5, r, true_rank[u])
+        pre = Precision(5, u, r, true_rank[u])
         p[u] = pre
         print("Precision for "+str(u)+" : ", pre)
     return res
