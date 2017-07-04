@@ -133,9 +133,9 @@ f.close()
 
 f = open("res_num2.txt", 'w')
 
-f.write("kendall_tau: "+str(np.mean(ken))+"("+np.var(ken)+")\n")
-f.write("pearman_rho: "+str(np.mean(s))+"("+np.var(s)+")\n")
-f.write("NDCG: "+str(np.mean(nd))+"("+np.var(nd)+")\n")
-f.write("Precision: "+str(np.mean(p))+"("+np.var(p)+")\n")
+f.write("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
+f.write("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
+f.write("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
+f.write("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
 
 f.close()
