@@ -21,20 +21,18 @@ n1 = len(H)
 
 f = open("s_ui.pkl", "wb")
 
-beta = 10
+beta = 50
 
-s = []
 
-for i in range(n1):
-    print(i)
+for u in range(n2):
+    print(u)
     s_u = []
-    for u in range(n2):
+    for i in range(n1):
         s_ui = []
         for v in range(n2):
             if(u != v and len(N_uv[u][v]) >= beta and H[i, v]): s_ui.append(v)
         s_u.append(s_ui)
-    s.append(s_u)
+    pickle.dump(s_u, f)
 
-pickle.dump(s, f)
 f.close()
 
