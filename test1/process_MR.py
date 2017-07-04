@@ -25,9 +25,8 @@ f = open("true_rank.pkl", "rb")
 true_rank = pickle.load(f)
 f.close()
 
-print(H)
-
 #print(H)
+
 n2 = len(H[0])
 n1 = len(H)
 
@@ -190,6 +189,11 @@ f = open("result1.pkl", "wb")
 res = Multi_Rank(10)
 pickle.dump(res, f)
 f.close()
+
+print("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
+print("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
+print("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
+print("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
 
 f = open("res_num_MR.txt", 'w')
 
