@@ -18,8 +18,9 @@ B = []
 
 f = open("B.pkl","rb")
 for i in range(n2):
-    print(i)
-    B.append(pickle.load(f))
+    x = pickle.load(f)
+    #print(x)
+    B.append(x)
 f.close()
 
 f = open("w_vj.pkl","rb")
@@ -99,25 +100,27 @@ def Precision(k, u, X, Y):
         if test[i, u] == 5: count += 1
     return count/k
 
-res = []
 for u in range(n2):
     print(u)
     for i in range(n1):
         if(not y[i, u]):
             d = 0
             n = 0
-            for (v, j) in B[u][i]:
-                d += w[v, j] * (y[j, u] + y[i, v] - y[j, v])
-                n += w[v, j]
+            if(B[u] == 0):
+                y[i, u] = 0
+                continue
+
+            for v in B[u][i].keys():
+                for j in B[u][i][v]:
+                    d += w[v, j] * (y[j, u] + y[i, v] - y[j, v])
+                    n += w[v, j]
             if(n == 0): y[i, u] = 0
             else: y[i, u] = d/n
 
-    sigma = y[:, u]
+    sigma = y[:, u].toarray()
     D = list(zip(sigma, range(len(sigma))))
     D.sort(key=lambda x: x[0], reverse=True)
     r = [x[1] for x in D if x[1] in true_rank[u]]
-    r = [x[1] for x in D if x[1] in true_rank[u]]
-    res.append(r)
     print(r)
     kend = kendall_tau(r, true_rank[u])
     ken[u] = kend

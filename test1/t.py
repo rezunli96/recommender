@@ -1,4 +1,3 @@
-
 import numpy as np
 import pickle
 from scipy.sparse import lil_matrix
@@ -9,7 +8,7 @@ f.close()
 
 n1 = 1000
 n2 = 1390
-
+'''
 t = lil_matrix((n1, n2))
 
 for i in range(n1):
@@ -38,3 +37,13 @@ f.close()
 #print(s_iu)
 
 #print(s_ui)
+'''
+
+D = {}
+
+D[1] = [2, 3]
+D[3] = [4, 5]
+print(D)
+
+for i in D.keys():
+    for j in D[i]: print(i, j)

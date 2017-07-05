@@ -27,13 +27,21 @@ f.close()
 
 f = open("B.pkl", "wb")
 for u in range(n2):
-    print(u)
+    #print(u)
     B_u = []
     for i in range(n1):
-        B_ui = []
+        B_ui = {}
         for v in s_ui[u][i]:
             for j in s_iu[i][u]:
-                if(H[j, v]): B_ui.append((v, j))
+                if(H[j, v]):
+                    if(v in B_ui.keys()):
+                        B_ui[v].append(j)
+                    else:
+                        B_ui[v] = [j]
         B_u.append(B_ui)
-    pickle.dump(B_u, f)
+    #print(B_u)
+    if(B_u == [{}] * n1):
+        print(u)
+        pickle.dump(0, f)
+    else: pickle.dump(B_u, f)
 f.close()
