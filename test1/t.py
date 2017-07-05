@@ -6,8 +6,31 @@ f = open("train_data.pkl", "rb")
 train = pickle.load(f)
 f.close()
 
+
+
+f = open("val_data.pkl", "rb")
+val = pickle.load(f)
+f.close()
+
+f = open("test_data.pkl", "rb")
+test = pickle.load(f)
+f.close()
+
+
 n1 = 1000
 n2 = 1390
+
+rate = [0] * 6
+
+t = 0
+for u in range(n2):
+    total = 0
+    for i in range(n1):
+        rate[int(train[i, u])] += 1
+        rate[int(val[i, u])] += 1
+        rate[int(test[i, u])] += 1
+
+print(rate)
 '''
 t = lil_matrix((n1, n2))
 
@@ -39,11 +62,5 @@ f.close()
 #print(s_ui)
 '''
 
-D = {}
 
-D[1] = [2, 3]
-D[3] = [4, 5]
-print(D)
 
-for i in D.keys():
-    for j in D[i]: print(i, j)

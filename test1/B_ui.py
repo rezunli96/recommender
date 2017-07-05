@@ -41,7 +41,7 @@ for u in range(n2):
         B_u.append(B_ui)
     #print(B_u)
     if(B_u == [{}] * n1):
-        print(u)
+        #print(u)
         pickle.dump(0, f)
     else: pickle.dump(B_u, f)
 f.close()
