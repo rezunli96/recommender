@@ -3,40 +3,38 @@ import numpy as np
 import pickle
 from scipy.sparse import lil_matrix
 # jit decorator tells Numba to compile this function.
-
-n2 = 10
-ken = np.zeros(n2)
-s = np.zeros(n2)
-nd = np.zeros(n2)
-p = np.zeros(n2)
-
-ken_pkl = open("ken_pkl.pkl", "wb")
-s_pkl = open("s_pkl.pkl", "wb")
-nd_pkl = open("nd_pkl.pkl", "wb")
-p_pkl = open("p_pkl.pkl", "wb")
-
-pickle.dump(ken, ken_pkl)
-pickle.dump(s, s_pkl)
-pickle.dump(nd, nd_pkl)
-pickle.dump(p, p_pkl)
-
-ken_pkl.close()
-s_pkl.close()
-nd_pkl.close()
-p_pkl.close()
-f = open("res_num_MR.txt", 'w')
-
-print("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
-print("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
-print("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
-print("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
-
-f.write("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
-f.write("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
-f.write("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
-f.write("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
-
+f = open("train_data.pkl", "rb")
+train = pickle.load(f)
 f.close()
+
+n1 = 1000
+n2 = 1390
+
+t = lil_matrix((n1, n2))
+
+for i in range(n1):
+    for j in range(n2):
+        if(train[i, j]): t[i, j] = train[i, j]
+
+f = open("sparse_train_data.pkl", "wb")
+pickle.dump(t, f)
+f.close()
+
+f = open("test_data.pkl", "rb")
+train = pickle.load(f)
+f.close()
+
+
+t = lil_matrix((n1, n2))
+
+for i in range(n1):
+    for j in range(n2):
+        if (train[i, j]): t[i, j] = train[i, j]
+
+f = open("sparse_test_data.pkl", "wb")
+pickle.dump(t, f)
+f.close()
+
 #print(s_iu)
 
 #print(s_ui)

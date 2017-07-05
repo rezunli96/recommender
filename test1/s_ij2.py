@@ -7,20 +7,9 @@ f = open("train_data.pkl", 'rb')
 H = pickle.load(f)
 f.close()
 
-f = open("Nuv_train.pkl", 'rb')
-N_uv = pickle.load(f)
-f.close()
 
 f = open("N2ij_train.pkl", 'rb')
 N_ij = pickle.load(f)
-f.close()
-
-f = open("s_ui.pkl", 'rb')
-s_ui = pickle.load(f)
-f.close()
-
-f = open("s_iu.pkl", 'rb')
-s_iu = pickle.load(f)
 f.close()
 
 

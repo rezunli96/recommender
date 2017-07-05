@@ -11,9 +11,6 @@ f = open("Nuv_train.pkl", 'rb')
 N_uv = pickle.load(f)
 f.close()
 
-f = open("N2ij_train.pkl", 'rb')
-N_ij = pickle.load(f)
-f.close()
 
 
 n2 = len(H[0])

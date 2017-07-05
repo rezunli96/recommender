@@ -7,31 +7,33 @@ f = open("train_data.pkl", 'rb')
 H = pickle.load(f)
 f.close()
 
-
-f = open("s_ui.pkl", 'rb')
-s_ui = pickle.load(f)
-f.close()
-
-f = open("s_iu.pkl", 'rb')
-s_iu = pickle.load(f)
-f.close()
-
-
 n2 = len(H[0])
 n1 = len(H)
 
+s_ui = []
+f = open("s_ui.pkl", 'rb')
+for u in range(n2):
+    s_ui.append(pickle.load(f))
+f.close()
+
+s_iu = []
+f = open("s_iu.pkl", 'rb')
+for i in range(n1):
+    s_iu.append(pickle.load(f))
+f.close()
+
+
+
+
 f = open("B.pkl", "wb")
-B = []
 for u in range(n2):
     print(u)
     B_u = []
     for i in range(n1):
         B_ui = []
-        for v in s_ui[i]:
-            for j in s_iu[u]:
+        for v in s_ui[u][i]:
+            for j in s_iu[i][u]:
                 if(H[j, v]): B_ui.append((v, j))
         B_u.append(B_ui)
-    B.append(B_u)
-
-pickle.dump(B, f)
+    pickle.dump(B_u, f)
 f.close()

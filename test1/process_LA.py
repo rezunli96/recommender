@@ -2,17 +2,24 @@ import pickle
 import numpy as np
 import math
 
+n1 = 1000
+n2 = 1390
 
-f = open("train_data.pkl","rb")
+
+f = open("sparse_train_data.pkl","rb")
 y = pickle.load(f)
 f.close()
 
-f = open("test_data.pkl", 'rb')
+f = open("sparse_test_data.pkl", 'rb')
 test = pickle.load(f)
 f.close()
 
+B = []
+
 f = open("B.pkl","rb")
-B = pickle.load(f)
+for i in range(n2):
+    print(i)
+    B.append(pickle.load(f))
 f.close()
 
 f = open("w_vj.pkl","rb")
@@ -23,8 +30,6 @@ f = open("true_rank.pkl", "rb")
 true_rank = pickle.load(f)
 f.close()
 
-n1 = len(y)
-n2 = len(y[0])
 
 ken = np.zeros(n2)
 s = np.zeros(n2)
@@ -137,5 +142,3 @@ f.write("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\
 f.write("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
 f.write("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
 f.write("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
-
-f.close()
