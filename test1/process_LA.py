@@ -2,16 +2,25 @@ import pickle
 import numpy as np
 import math
 
-n1 = 1000
-n2 = 1390
 
 
-f = open("sparse_train_data.pkl","rb")
+f = open("train_data.pkl","rb")
 y = pickle.load(f)
 f.close()
 
-f = open("sparse_test_data.pkl", 'rb')
+n1 = len(y)
+n2 = len(y[0])
+
+f = open("test_data.pkl", 'rb')
 test = pickle.load(f)
+f.close()
+
+f = open("s_ij2.pkl", "rb")
+s_ij2 = pickle.load(f)
+f.close()
+
+f = open("s_uv2.pkl", "rb")
+s_uv2 = pickle.load(f)
 f.close()
 
 B = []
@@ -23,9 +32,6 @@ for i in range(n2):
     B.append(x)
 f.close()
 
-f = open("w_vj.pkl","rb")
-w = pickle.load(f)
-f.close()
 
 f = open("true_rank.pkl", "rb")
 true_rank = pickle.load(f)
@@ -37,6 +43,8 @@ s = np.zeros(n2)
 nd = np.zeros(n2)
 p = np.zeros(n2)
 
+
+lam = 0
 
 def kendall_tau(X, Y):
     D = {}
@@ -100,6 +108,23 @@ def Precision(k, u, X, Y):
         if test[i, u] == 5: count += 1
     return count/k
 
+
+
+
+
+def w(u, i, v, j):
+    return math.exp(- lam * min(s_ij2[i][j], s_uv2[u][v]))
+
+
+
+
+
+
+
+
+
+
+
 for u in range(n2):
     print(u)
     for i in range(n1):
@@ -112,12 +137,12 @@ for u in range(n2):
 
             for v in B[u][i].keys():
                 for j in B[u][i][v]:
-                    d += w[v, j] * (y[j, u] + y[i, v] - y[j, v])
-                    n += w[v, j]
+                    d += w(u, i, v, j) * (y[j, u] + y[i, v] - y[j, v])
+                    n += w(u, i, v, j)
             if(n == 0): y[i, u] = 0
             else: y[i, u] = d/n
 
-    sigma = y[:, u].toarray()
+    sigma = y[:, u]
     D = list(zip(sigma, range(len(sigma))))
     D.sort(key=lambda x: x[0], reverse=True)
     r = [x[1] for x in D if x[1] in true_rank[u]]

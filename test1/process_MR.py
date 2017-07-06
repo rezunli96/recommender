@@ -37,10 +37,12 @@ s = np.zeros(n2)
 nd = np.zeros(n2)
 p = np.zeros(n2)
 
-ken_pkl = open("ken_pkl.pkl", "wb")
-s_pkl = open("s_pkl.pkl", "wb")
-nd_pkl = open("nd_pkl.pkl", "wb")
-p_pkl = open("p_pkl.pkl", "wb")
+dir = ".\\MR_result\\MRW_realVote\\result10\\"
+
+ken_pkl = open(dir + "ken_pkl.pkl", "wb")
+s_pkl = open(dir +"s_pkl.pkl", "wb")
+nd_pkl = open(dir +"nd_pkl.pkl", "wb")
+p_pkl = open(dir +"p_pkl.pkl", "wb")
 
 def kendall_tau(X, Y):
     D = {}
@@ -123,11 +125,23 @@ def Pairwise_Rank(u, i, j, k):
     W_iju = W(i, j, u)
     W_iju.sort(key=lambda x: R[u][x], reverse= True)
     V = W_iju[0: k]
-    if(V == []): return int(np.random.randint(2))
-    P = [R[u][v] * (H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) for v in V]
-    if(sum(P) > 0): return 1
-    elif(sum(P) < 0): return 0
-    else: return int(np.random.randint(2))
+    if(V == []): return .5
+    #P = [R[u][v] * (H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) for v in V] #MR
+    #P = [(H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) for v in V] #MRW
+    #print(sum(P))
+    n = 0
+    d = 0
+    for v in V:
+        if((H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) == 1):
+            n += R[u][v]
+            #n += 1
+        elif((H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) == 0):
+            n += .5 * R[u][v]
+            #n += .5
+        d += R[u][v]
+        #d += 1
+    #print(n/d)
+    return n/d
 
 
 
@@ -137,7 +151,7 @@ def Multi_Rank(k):
     #sigma = np.zeros((n2, n1))
     for u in range(n2):
         print(u)
-        sigma = [0] * n2
+        sigma = [0] * n1
         for j in range(n1):
             for i in range(j):
                 if(H[i, u] and H[j, u]):
@@ -174,28 +188,36 @@ def Multi_Rank(k):
 
 
 
+
+
+
+f = open(dir +"result.pkl", "wb")
+res = Multi_Rank(10)
+pickle.dump(res, f)
+f.close()
+
+
 pickle.dump(ken, ken_pkl)
 pickle.dump(s, s_pkl)
 pickle.dump(nd, nd_pkl)
 pickle.dump(p, p_pkl)
+
+
+
+#print(ken)
+
 
 ken_pkl.close()
 s_pkl.close()
 nd_pkl.close()
 p_pkl.close()
 
-
-f = open("result1.pkl", "wb")
-res = Multi_Rank(10)
-pickle.dump(res, f)
-f.close()
-
 print("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
 print("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
 print("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
 print("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
 
-f = open("res_num_MR.txt", 'w')
+f = open(dir +"res_num_MR.txt", 'w')
 
 f.write("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
 f.write("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")

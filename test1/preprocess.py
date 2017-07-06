@@ -21,18 +21,11 @@ for rate in data:
 
 #print(full_data)
 
-I = n1*[0]
-for i in range(n1):
-    for j in range(n2):
-        I[i] += (full_data[i][j] > 0)
+size = 500
 
+drop = random.sample((range(n1)), n1 - size)
+total = 0
 
-D = list(zip(I, range(len(I))))
-D.sort(key=lambda x: x[0], reverse=True)
-
-size = 1000
-
-drop = [x[1] for x in D][size:]
 
 print(len(drop))
 
@@ -40,6 +33,14 @@ full_data = np.delete(full_data, drop, axis=0)
 
 n1 = len(full_data)
 n2 = len(full_data[0])
+
+'''
+for i in range(n1):
+    for j in range(n2):
+        total += (full_data[i, j] > 0)
+
+print(total)
+'''
 
 train = np.zeros((n1, n2))
 val = np.zeros((n1, n2))
@@ -66,7 +67,7 @@ for i in range(n2):
         if(train[j, i]): sum_train += 1
         if(val[j, i]): sum_val += 1
         if(test[j, i]): sum_test  += 1
-    if(sum_train < 75 and (sum_val <30 or sum_test < 30)): drop.append(i)
+    if(sum_train < 50 and (sum_val <25 or sum_test < 25)): drop.append(i)
 
 
 train = np.delete(train, drop, axis=1)

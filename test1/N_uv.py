@@ -11,15 +11,15 @@ n1 = len(train)
 f = open("Nuv_train.pkl", 'wb')
 N = []
 
-for i in range(n2):
-    print(i)
-    N_i = []
-    for j in range(n2):
-        N_ij = []
-        for k in range(n1):
-            if(train[k, i] and train[k, j]):  N_ij.append(k)
-        N_i.append(N_ij)
-    N.append(N_i)
+for u in range(n2):
+    print(u)
+    N_u = []
+    for v in range(n2):
+        N_uv = []
+        for l in range(n1):
+            if(train[l, u] and train[l, v]):  N_uv.append(l)
+        N_u.append(N_uv)
+    N.append(N_u)
 
 pickle.dump(N, f)
 f.close()

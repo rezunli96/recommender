@@ -18,7 +18,8 @@ n1 = len(H)
 
 f = open("s_iu.pkl", "wb")
 
-beta = 30
+beta = 2
+
 
 
 for i in range(n1):

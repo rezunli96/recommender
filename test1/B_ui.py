@@ -27,7 +27,7 @@ f.close()
 
 f = open("B.pkl", "wb")
 for u in range(n2):
-    #print(u)
+    print(u)
     B_u = []
     for i in range(n1):
         B_ui = {}
