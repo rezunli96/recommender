@@ -3,46 +3,22 @@ import pickle
 from scipy.sparse import dok_matrix
 from scipy.sparse import lil_matrix
 import math
-f = open("train_data.pkl", 'rb')
-H = pickle.load(f)
-f.close()
-
-
-f = open("test_data.pkl", 'rb')
-test = pickle.load(f)
-f.close()
-
-f = open("Ruv_train.pkl", 'rb')
-R = pickle.load(f)
-f.close()
-
-f = open("Nuv_candidate.pkl", 'rb')
-N_C = pickle.load(f)
-f.close()
-
-
-f = open("true_rank.pkl", "rb")
-true_rank = pickle.load(f)
-f.close()
+import os
 
 #print(H)
 
-n2 = len(H[0])
-n1 = len(H)
+dir = ".\\result\\"
 
-beta = 10
+test_num = 100
 
-ken = np.zeros(n2)
-s = np.zeros(n2)
-nd = np.zeros(n2)
-p = np.zeros(n2)
 
-dir = ".\\MR_result\\MRW_realVote\\result10\\"
 
-ken_pkl = open(dir + "ken_pkl.pkl", "wb")
-s_pkl = open(dir +"s_pkl.pkl", "wb")
-nd_pkl = open(dir +"nd_pkl.pkl", "wb")
-p_pkl = open(dir +"p_pkl.pkl", "wb")
+
+
+
+#dir = ".\\MR_result2\\MR\\result4\\"
+
+
 
 def kendall_tau(X, Y):
     D = {}
@@ -89,6 +65,7 @@ def spearman_rho(X, Y):
     return (n/(d1*d2)**.5)
 
 
+'''
 def NDCG(k, u , X, Y):
     dcg = 0
     norm = 0
@@ -108,11 +85,11 @@ def Precision(k, u, X, Y):
 
 
 
+'''
 
 
 
-
-def W(i, j, u):
+def W(i, j, u, H, N_C):
     res = []
     for v in N_C[u]:
         if(H[i, v] and H[j, v]): res.append(v)
@@ -120,37 +97,54 @@ def W(i, j, u):
 
 
 
-def Pairwise_Rank(u, i, j, k):
+def Pairwise_Rank(u, i, j, k, alg, H, R, N_C):
     #print(((u, i, j)))
-    W_iju = W(i, j, u)
+    W_iju = W(i, j, u, H, N_C)
     W_iju.sort(key=lambda x: R[u][x], reverse= True)
     V = W_iju[0: k]
-    if(V == []): return .5
-    #P = [R[u][v] * (H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) for v in V] #MR
-    #P = [(H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) for v in V] #MRW
+    if(V == []):
+        if(alg[-8:] == "realvote"): return 0.5
+        else: return np.random.randint(2)
+
+    if(alg[-8:] == "realvote"):
+        n = 0
+        d = 0
+        for v in V:
+            if ((H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) == 1):
+
+                if(alg == "MRW_realvote"): n += R[u][v]
+                if(alg == "MR_realvote"): n += 1
+            elif ((H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) == 0):
+                if (alg == "MRW_realvote"): n += .5 * R[u][v]
+                if (alg == "MR_realvote"): n += .5
+            #d += R[u][v]
+            d += 1
+        # print(n/d)
+        return n / d
+
+    P = []
+    if(alg == "MR"):
+        P = [(H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) for v in V]  # MR
+    if(alg == "MRW"):
+        P = [R[u][v] * (H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) for v in V] #MRW
+
     #print(sum(P))
-    n = 0
-    d = 0
-    for v in V:
-        if((H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) == 1):
-            n += R[u][v]
-            #n += 1
-        elif((H[i, v] > H[j, v]) - (H[i, v] < H[j, v]) == 0):
-            n += .5 * R[u][v]
-            #n += .5
-        d += R[u][v]
-        #d += 1
-    #print(n/d)
-    return n/d
+    if(sum(P) > 0): return 1
+    elif (sum(P) < 0): return 0
+    return np.random.randint(2)
 
 
 
 
-def Multi_Rank(k):
+def Multi_Rank(k, H, true_rank, alg, R, N_C):
     res = []
+    n1 = len(H)
+    n2 = len(H[0])
+    ken = np.zeros(n2)
+    s = np.zeros(n2)
     #sigma = np.zeros((n2, n1))
     for u in range(n2):
-        print(u)
+        #print(u)
         sigma = [0] * n1
         for j in range(n1):
             for i in range(j):
@@ -159,7 +153,7 @@ def Multi_Rank(k):
                     sigma[j] += 1 - sigma[i]
                 else:
                     #print((u, i, j))
-                    sigma[i] += Pairwise_Rank(u, i, j, k)
+                    sigma[i] += Pairwise_Rank(u, i, j, k, alg, H, R, N_C)
                     sigma[j] += 1 - sigma[i]
 
         D = list(zip(sigma, range(len(sigma))))
@@ -167,12 +161,13 @@ def Multi_Rank(k):
 
         r = [x[1] for x in D if x[1] in true_rank[u]]
         res.append(r)
-        print(r)
+        #print(r)
         kend = kendall_tau(r, true_rank[u])
         ken[u] = kend
-        print("kendall_tau for "+str(u)+" : ", kend)
+        #print("kendall_tau for "+str(u)+" : ", kend)
         spe = spearman_rho(r, true_rank[u])
         s[u] = spe
+        '''
         print("spearman_rho for "+str(u)+" : ", spe)
         ndcg = NDCG(5, u, r, true_rank[u])
         nd[u] = ndcg
@@ -180,50 +175,88 @@ def Multi_Rank(k):
         pre = Precision(5, u, r, true_rank[u])
         p[u] = pre
         print("Precision for "+str(u)+" : ", pre)
-    return res
+        '''
+    return res, ken, s
 
 
 
 
 
+def process(num, alg):
+
+    dir_t = dir + str(num) + "\\"
+
+    dir_res = dir_t + alg + "\\"
+
+
+    if not os.path.exists(dir_res):
+        os.makedirs(dir_res)
+
+
+    f = open(dir_t + "train_data.pkl", 'rb')
+    H = pickle.load(f)
+    f.close()
+
+
+    f = open(dir_t +"Ruv_train.pkl", 'rb')
+    R = pickle.load(f)
+    f.close()
+
+    f = open(dir_t +"Nuv_candidate.pkl", 'rb')
+    N_C = pickle.load(f)
+    f.close()
+
+    f = open(dir_t +"true_rank.pkl", "rb")
+    true_rank = pickle.load(f)
+    f.close()
+
+    n2 = len(H[0])
+    n1 = len(H)
+
+
+
+    ken_pkl = open(dir_res + "ken_pkl.pkl", "wb")
+    s_pkl = open(dir_res + "s_pkl.pkl", "wb")
+    #nd_pkl = open(dir_res + "nd_pkl.pkl", "wb")
+    #p_pkl = open(dir_res + "p_pkl.pkl", "wb")
+
+    f = open(dir_res + "result.pkl", "wb")
+    res, ken, s = Multi_Rank(10, H, true_rank, alg, R, N_C)
+    pickle.dump(res, f)
+    f.close()
+
+    pickle.dump(ken, ken_pkl)
+    pickle.dump(s, s_pkl)
+    '''
+    pickle.dump(nd, nd_pkl)
+    pickle.dump(p, p_pkl)
+    '''
+
+    # print(ken)
+    ken_pkl.close()
+    s_pkl.close()
+    #nd_pkl.close()
+    #p_pkl.close()
+
+    print("kendall_tau: " + str(float(np.mean(ken))) + "(" + str(float(np.var(ken))) + ")\n")
+    print("pearman_rho: " + str(float(np.mean(s))) + "(" + str(float(np.var(s))) + ")\n")
+
+
+    f = open(dir_res + "res.txt", 'w')
+
+    f.write("kendall_tau: " + str(float(np.mean(ken))) + "(" + str(float(np.var(ken))) + ")\n")
+    f.write("pearman_rho: " + str(float(np.mean(s))) + "(" + str(float(np.var(s))) + ")\n")
+
+    f.close()
 
 
 
 
-
-f = open(dir +"result.pkl", "wb")
-res = Multi_Rank(10)
-pickle.dump(res, f)
-f.close()
+alg_names = ["MR", "MRW","MR_realvote", "MRW_realvote"]
 
 
-pickle.dump(ken, ken_pkl)
-pickle.dump(s, s_pkl)
-pickle.dump(nd, nd_pkl)
-pickle.dump(p, p_pkl)
-
-
-
-#print(ken)
-
-
-ken_pkl.close()
-s_pkl.close()
-nd_pkl.close()
-p_pkl.close()
-
-print("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
-print("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
-print("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
-print("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
-
-f = open(dir +"res_num_MR.txt", 'w')
-
-f.write("kendall_tau: "+str(float(np.mean(ken)))+"("+str(float(np.var(ken)))+")\n")
-f.write("pearman_rho: "+str(float(np.mean(s)))+"("+str(float(np.var(s)))+")\n")
-f.write("NDCG: "+str(float(np.mean(nd)))+"("+str(float(np.var(nd)))+")\n")
-f.write("Precision: "+str(float(np.mean(p)))+"("+str(float(np.var(p)))+")\n")
-
-f.close()
-
+for i in range(test_num):
+    for alg in alg_names:
+        print(i, alg)
+        process(i, alg)
 
