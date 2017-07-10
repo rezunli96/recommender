@@ -1,8 +1,18 @@
 import numpy as np
 import pickle
-from scipy.sparse import dok_matrix
-from scipy.sparse import lil_matrix
+
 import os
+
+
+'''
+This file generates item_beat.pkl. Where item_beat[i, u] is the fraction of item that i beat in train[u].
+
+'''
+
+
+
+
+
 
 dir = ".\\result"
 

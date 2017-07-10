@@ -2,12 +2,8 @@ import numpy as np
 import random
 import pickle
 import os
-
-import numpy as np
 import pickle
 import math
-from scipy.sparse import dok_matrix
-from scipy.sparse import lil_matrix
 import os
 from metric import distance1
 
@@ -16,20 +12,16 @@ dir = ".\\result"
 
 test_num = 100
 
-T = 20
-
-
-K = 30
+K = 10
 
 
 
-def alg(num):
+def new_alg(num):
     d = dir + "\\" + str(num) + "\\"
     print(d)
     if not os.path.exists(d):
         os.makedirs(d)
-
-    f = open(d + "complete_data.pkl", 'rb')
+    f = open(d + "sampled_data.pkl", 'rb')
     data = pickle.load(f)
     f.close()
     f = open(d + "train_data.pkl", 'rb')
@@ -46,7 +38,15 @@ def alg(num):
     f = open(d + "N_u.pkl", 'rb')
     N_u = pickle.load(f)
     f.close()
+
+
+
+
     dis = np.zeros(n2)
+    rank = []
+
+
+
     for u in range(n2):
         sigma = [0] * n1
         for i in range(n1):
@@ -62,15 +62,18 @@ def alg(num):
         D = list(zip([x[1] for x in D], range(1, len(D) + 1)))
         D.sort(key=lambda x: x[0])
         res = [x[1] for x in D]
+        rank.append(res)
         dis[u] = distance1(true_rank[u], res, K)
 
-    f = open(d + "result.pkl", 'wb')
+
+
+    f = open(d + "dis_new.pkl", 'wb')
     pickle.dump(dis, f)
-    print(dis)
     f.close()
+    f = open(d + 'res.pkl', "wb")
+    pickle.dump(rank, f)
+    f.close()
+    return dis
 
 
-
-for i in range(test_num):
-    alg(i)
 

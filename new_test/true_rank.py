@@ -4,13 +4,26 @@ from scipy.sparse import dok_matrix
 from scipy.sparse import lil_matrix
 import os
 
+'''
+This file calculate the true ranking of each user and store it into true_rank.pkl. true_rank.pkl is a n2 * n1 matrix,
+
+with each row represents the ranking of all n1 items for this user. For example, true_rank[u] = [3, 2, 5, 9 ....], 
+
+meaning for user u, item 0 ranks 3 highest, item 1 ranks 2 highest.......
+
+'''
+
+
+
+
+
 
 dir = ".\\result"
 
 test_num = 100
 
 
-def true(num):
+def cal_true(num):
 
     print(num)
     d = dir + "\\" + str(num) + "\\"
@@ -18,7 +31,7 @@ def true(num):
     if not os.path.exists(d):
         os.makedirs(d)
 
-    f = open(d + "complete_data.pkl", 'rb')
+    f = open(d + "sampled_data.pkl", 'rb')
     H = pickle.load(f)
     f.close()
 
@@ -29,21 +42,18 @@ def true(num):
 
     # f = open("true_rank.txt", "w")
 
-    for i in range(n2):
-        u = H[:, i]
+    for u in range(n2):
+        res = H[:, u]
 
-        u = list(zip(u, range(len(u))))
-        u.sort(key=lambda x: x[0], reverse=True)
+        res = list(zip(res, range(len(res))))  # now res = [(rate(u, 0), 0), (rate(u, 1), 1).......]
+        res.sort(key=lambda x: x[0], reverse=True) # u is now sorted decreasingly with respected to rate
         # print(u)
-        res = list(zip([x[1] for x in u if x[0]], range(1, len(u) + 1)))
-        res.sort(key=lambda x: x[0])
+        res = list(zip([x[1] for x in res if x[0]], range(1, len(res) + 1)))  #add rank number for each item
+        res.sort(key=lambda x: x[0]) # rearrange item with respect to their index
         res = [x[1] for x in res]
         # print(res)
         true_rank.append(res)
-        # f.write(",".join([str(x) for x in res])+'\n')
 
-    # f.close()
-    print(n2)
 
     # print(true_rank)
     f = open(d + "true_rank.pkl", "wb")
@@ -53,7 +63,7 @@ def true(num):
 
 
 for i in range(test_num):
-    true(i)
+    cal_true(i)
 
 
 

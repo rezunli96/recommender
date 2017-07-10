@@ -1,10 +1,15 @@
 import numpy as np
 import pickle
 import math
-from scipy.sparse import dok_matrix
-from scipy.sparse import lil_matrix
+
 import os
 from metric import distance1
+
+'''
+This file calculate Top-K distance among all pairs of (u, v) from ground-truth and stored it in dis[u][v]
+
+'''
+
 
 
 dir = ".\\result"
@@ -12,7 +17,7 @@ dir = ".\\result"
 test_num = 100
 
 
-K = 30
+K = 10 # K in Top-K
 
 def cal_dis(num):
     d = dir + "\\" + str(num) + "\\"
@@ -20,7 +25,7 @@ def cal_dis(num):
     if not os.path.exists(d):
         os.makedirs(d)
 
-    f = open(d + "complete_data.pkl", 'rb')
+    f = open(d + "sampled_data.pkl", 'rb')
     data = pickle.load(f)
     f.close()
     f = open(d + "true_rank.pkl", "rb")
@@ -29,12 +34,11 @@ def cal_dis(num):
     n2 = len(data[0])
     n1 = len(data)
     f = open(d + "dis_uv.pkl", 'wb')
-    N = []
 
     dis = np.zeros((n2, n2))
+    m = 1000
     for u in range(n2):
         for v in range(n2):
-            d = 0
             complete_u = true_rank[u]
             complete_v = true_rank[v]
             dis[u][v] = distance1(complete_u, complete_v, K)

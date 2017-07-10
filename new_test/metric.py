@@ -1,9 +1,17 @@
 import numpy as np
 import pickle
 import math
-from scipy.sparse import dok_matrix
-from scipy.sparse import lil_matrix
 import os
+
+
+'''
+This file store possible top-K distance function for two rank array. For example, X = [3, 4, 1, 5 .....], meaning in X
+
+item 0 ranks the 3th highest, item 1 ranks the 4 th......
+
+'''
+
+
 
 def distance1(X, Y, K):
     d = 0

@@ -1,8 +1,17 @@
 import numpy as np
 import pickle
-from scipy.sparse import dok_matrix
-from scipy.sparse import lil_matrix
+
 import os
+
+
+
+
+'''
+
+This file compute N(u, v) in MR algorithm, i.e., all item commonly rated by u and v in training set.
+
+'''
+
 
 dir = ".\\result"
 
@@ -14,7 +23,7 @@ def N(num):
     if not os.path.exists(d):
         os.makedirs(d)
 
-    f = open(d + "complete_data.pkl", 'rb')
+    f = open(d + "train_data.pkl", 'rb')
     train = pickle.load(f)
     f.close()
     n2 = len(train[0])
