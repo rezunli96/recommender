@@ -20,7 +20,7 @@ meaning for user u, item 0 ranks 3 highest, item 1 ranks 2 highest.......
 
 dir = ".\\result"
 
-test_num = 100
+test_num = 1
 
 
 def cal_true(num):
@@ -47,8 +47,7 @@ def cal_true(num):
 
         res = list(zip(res, range(len(res))))  # now res = [(rate(u, 0), 0), (rate(u, 1), 1).......]
         res.sort(key=lambda x: x[0], reverse=True) # u is now sorted decreasingly with respected to rate
-        # print(u)
-        res = list(zip([x[1] for x in res if x[0]], range(1, len(res) + 1)))  #add rank number for each item
+        res = list(zip([x[1] for x in res], range(1, len(res) + 1)))  # add rank number for each item
         res.sort(key=lambda x: x[0]) # rearrange item with respect to their index
         res = [x[1] for x in res]
         # print(res)

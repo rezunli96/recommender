@@ -11,17 +11,12 @@ list N_candidate, with N_candidate[u] stores all such neighbourhood for u.
 '''
 
 
-
-
-
-
-
 dir = ".\\result"
 
-test_num = 100
+test_num = 1
 
 def N(num):
-    #print(num)
+    print(num)
     d = dir + "\\" + str(num) + "\\"
     # print(d)
     if not os.path.exists(d):
@@ -40,7 +35,7 @@ def N(num):
 
     #print(n2)
 
-    beta = 10
+    beta = 5
 
     N_candidate = []
 
@@ -52,7 +47,7 @@ def N(num):
             if (u != v):
                 if (len(N_uv[u][v]) >= beta):
                     Nu_candidate.append(v)
-        #print(len(Nu_candidate))
+        print(len(Nu_candidate))
         N_candidate.append(Nu_candidate)
 
     pickle.dump(N_candidate, f)

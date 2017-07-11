@@ -5,7 +5,7 @@ import os
 import pickle
 import math
 import os
-from metric import distance1
+from metric import distance1, kendall_tau
 
 
 dir = ".\\result"
@@ -43,7 +43,9 @@ def new_alg(num):
 
 
     dis = np.zeros(n2)
+    precision = np.zeros(n2)
     rank = []
+    ken = np.zeros(n2)
 
 
 
@@ -53,7 +55,7 @@ def new_alg(num):
             x = 0
             total = 0
             for v in N_u[u]:
-                if(train_data[i, v]):
+                if(train_data[i, v] != -99):
                     x += item_beat[i, v]
                     total += 1
             if(total): sigma[i] = x/total
@@ -64,9 +66,11 @@ def new_alg(num):
         res = [x[1] for x in D]
         rank.append(res)
         dis[u] = distance1(true_rank[u], res, K)
+        ken[u] = kendall_tau(true_rank[u], res)
+        # p = 0
 
 
-
+    print("kendall_tau: ", np.mean(ken), (np.var(ken)))
     f = open(d + "dis_new.pkl", 'wb')
     pickle.dump(dis, f)
     f.close()

@@ -39,6 +39,7 @@ def find_N(num):
     for u in range(n2):
         dis_u = dis_uv[u]
         D = list(zip(dis_u, range(len(dis_u))))
+        # D.sort(key=lambda x: x[0])
         D.sort(key=lambda x: x[0])
         N.append([x[1] for x in D][:beta])
     f = open(d + "N_u.pkl", "wb")

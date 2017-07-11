@@ -15,7 +15,7 @@ stores in directory .\\result\\i
 
 dir = ".\\result"
 
-test_num = 100 # total number of test samples
+test_num = 1 # total number of test samples
 
 f = open("full_data.pkl", "rb") # full_data.pkl is a preprocessed 100 * 5488 full matrix from jester_1 dataset
 
@@ -31,16 +31,17 @@ def prepro(num, full_data):
     if not os.path.exists(d):
         os.makedirs(d)
 
-    user_size = 300
+    user_size = 500
 
     total_user_number = len(full_data[0])
     sample = random.sample(range(total_user_number), user_size) # randomly sample 300 users from 5488, range(x) = [0, 1, 2..., x]
     sampled_data = full_data[:, sample]
-
+    sampled_data = full_data[:, :500]
     n1 = len(sampled_data)
     n2 = len(sampled_data[0])
 
     train = np.zeros((n1, n2))
+    train.fill(-99)
     #val = np.zeros((n1, n2))
     #test = np.zeros((n1, n2))
 

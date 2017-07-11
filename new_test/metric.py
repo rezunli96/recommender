@@ -19,3 +19,32 @@ def distance1(X, Y, K):
         if(X[i] <= K):
             d += abs(X[i] - Y[i])
     return d
+
+
+
+def kendall_tau(x, y):
+    n = 0
+    d1 = 0
+    d2 = 0
+    for i in range(len(x)):
+        for j in range(len(y)):
+            a = 0
+            b = 0
+            if(x[j] > x[i]): a = 1
+            elif(x[j] < x[i]): a = -1
+            if(y[j] > y[i]): b = 1
+            elif(y[j] < y[i]): b = -1
+            n += a*b
+            d1 += a**2
+            d2 += b**2
+
+    if(d1*d2 == 0): return 1
+    return (n/(d1*d2)**.5)
+
+def spearman_rho(x, y):
+    n = len(x)
+    res = 0
+    for i in range(n):
+        res += (x[i] - y[i]) ** 2
+    res = 1 - 6 * res / (n ** 3 - n)
+    return res

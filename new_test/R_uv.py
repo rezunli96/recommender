@@ -17,7 +17,7 @@ This file compute R(u, v) in MR algorithm.
 
 dir = ".\\result"
 
-test_num = 100
+test_num = 1
 
 def R(num):
     print(num)

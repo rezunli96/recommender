@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import math
 import os
-from metric import distance1
+from metric import distance1, kendall_tau
 
 dir = ".\\result\\"
 
@@ -11,7 +11,7 @@ K = 10
 def W(i, j, u, H, N_C):
     res = []
     for v in N_C[u]:
-        if(H[i, v] and H[j, v]): res.append(v)
+        if(H[i, v] != -99 and H[j, v] != -99): res.append(v)
     return res
 
 
@@ -55,31 +55,36 @@ def Pairwise_Rank(u, i, j, k, alg, H, R, N_C):
 
 
 def Multi_Rank(k, H, true_rank, alg, R, N_C):
-    res = []
     n1 = len(H)
     n2 = len(H[0])
     dis = np.zeros(n2)
+    ken = np.zeros(n2)
     for u in range(n2):
         #print(u)
         sigma = [0] * n1
         for j in range(n1):
             for i in range(j):
-                if(H[i, u] and H[j, u]):
+                if(H[i, u] != -99 and H[j, u] != -99):
                     # print(u, i, j)
                     sigma[i] += (H[i, u] > H[j ,u]) + np.random.randint(2) * (H[i, u] == H[j ,u])
                     sigma[j] += 1 - sigma[i]
                 else:
-                    # print((u, i, j))
+                    #print((u, i, j))
                     sigma[i] += Pairwise_Rank(u, i, j, k, alg, H, R, N_C)
                     sigma[j] += 1 - sigma[i]
+
+
         D = list(zip(sigma, range(len(sigma))))
         D.sort(key=lambda x: x[0], reverse=True)
         D = list(zip([x[1] for x in D], range(1, len(D) + 1)))
         D.sort(key=lambda x: x[0])
         res = [x[1] for x in D]
-
         dis[u] = distance1(true_rank[u], res, K)
-
+        ken[u] = kendall_tau(true_rank[u], res)
+        #print(true_rank[u])
+        #print(res)
+        #print("\n")
+    print("kendall_tau for MR: ", np.mean(ken), (np.var(ken)))
     return dis
 
 
@@ -117,9 +122,10 @@ def process_MR(num, alg): # alg is the version of MR algorithm, it may be MR, MR
     n2 = len(H[0])
     n1 = len(H)
 
+    k = 20
 
 
-    dis = Multi_Rank(10, H, true_rank, alg, R, N_C)
+    dis = Multi_Rank(k, H, true_rank, alg, R, N_C)
     f = open(dir_t + "result_"+alg + ".pkl", 'wb')
     pickle.dump(dis, f)
     f.close()

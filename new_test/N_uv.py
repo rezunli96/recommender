@@ -15,7 +15,7 @@ This file compute N(u, v) in MR algorithm, i.e., all item commonly rated by u an
 
 dir = ".\\result"
 
-test_num = 100
+test_num = 1
 
 def N(num):
     d = dir + "\\" + str(num) + "\\"
@@ -37,8 +37,9 @@ def N(num):
         for v in range(n2):
             N_uv = []
             for l in range(n1):
-                if (train[l, u] and train[l, v]):  N_uv.append(l)
+                if (train[l, u] != -99 and train[l, v] != -99):  N_uv.append(l)
             N_u.append(N_uv)
+            #print(len(N_uv))
         N.append(N_u)
 
     pickle.dump(N, f)
