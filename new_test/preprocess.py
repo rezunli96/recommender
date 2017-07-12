@@ -7,14 +7,25 @@ This file generate 100 test dataset from the origin 100 * 5488 full matrix. the 
 
 stores in directory .\\result\\i
 
+
 '''
+
+
+
 
 dir = ".\\result"
 
-test_num = 10 # total number of test samples
+test_num = 1 # total number of test samples
 
-def generate_data(num, full_data):
-    print("Generating dataset for ",num)
+f = open("full_data.pkl", "rb") # full_data.pkl is a preprocessed 100 * 5488 full matrix from jester_1 dataset
+
+full_data = pickle.load(f)
+
+f.close()
+
+
+def prepro(num, full_data):
+    # print(num)
     d = dir + "\\" + str(num) + "\\"  # directory to store file
     # print(d)
     if not os.path.exists(d):
@@ -23,9 +34,9 @@ def generate_data(num, full_data):
     user_size = 500
 
     total_user_number = len(full_data[0])
-    sample = random.sample(range(total_user_number), user_size) # randomly sample 300 users from 7200, range(x) = [0, 1, 2..., x]
+    sample = random.sample(range(total_user_number), user_size) # randomly sample 300 users from 5488, range(x) = [0, 1, 2..., x]
     sampled_data = full_data[:, sample]
-    #sampled_data = full_data[:, :500]
+    sampled_data = full_data[:, :500]
     n1 = len(sampled_data)
     n2 = len(sampled_data[0])
 
@@ -37,7 +48,7 @@ def generate_data(num, full_data):
     for i in range(n1):
         for j in range(n2):
             rnd = random.uniform(0, 100)
-            if (rnd <= 20 and sampled_data[i, j] != -99):   # split the dataset 40% into the training set
+            if (rnd <= 40):   # split the dataset 40% into the training set
                 train[i, j] = sampled_data[i, j]
             '''
             elif (rnd <= 55):
@@ -60,3 +71,10 @@ def generate_data(num, full_data):
     f1.close()
 
 
+
+def main():
+    for i in range(test_num):
+        prepro(i, full_data)
+
+
+main()

@@ -23,6 +23,20 @@ def distance1(X, Y, K):
 
 
 
+
+
+def distance2(X, Y, K):
+
+    d = 0
+    for i in range(len(X)):
+        x = X[i] if X[i] <= K else K + 1
+        y = Y[i] if Y[i] <= K else K + 1
+        d += abs(x - y)/(i + 1)
+    return d
+
+
+
+
 def KEN(x, y):
     n = len(x)
     pair = 0

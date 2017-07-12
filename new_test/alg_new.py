@@ -10,10 +10,8 @@ from metric import distance1, kendall_tau
 
 dir = ".\\result"
 
-test_num = 100
 
 K = 10
-
 
 
 def new_alg(num):
@@ -68,8 +66,6 @@ def new_alg(num):
         dis[u] = distance1(true_rank[u], res, K)
         ken[u] = kendall_tau(true_rank[u], res)
         # p = 0
-
-
     print("kendall_tau: ", np.mean(ken), (np.var(ken)))
     f = open(d + "dis_new.pkl", 'wb')
     pickle.dump(dis, f)

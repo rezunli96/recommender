@@ -13,4 +13,4 @@ a = pickle.load(f)
 f.close()
 
 
-print(a.shape)
+print(a)

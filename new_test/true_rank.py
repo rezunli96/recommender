@@ -50,7 +50,6 @@ def cal_true(num):
         # print(res)
         true_rank.append(res)
 
-
     # print(true_rank)
     f = open(d + "true_rank.pkl", "wb")
     pickle.dump(true_rank, f)

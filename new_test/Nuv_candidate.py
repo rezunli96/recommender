@@ -14,7 +14,7 @@ list N_candidate, with N_candidate[u] stores all such neighbourhood for u.
 dir = ".\\result"
 
 
-def N_C(num):
+def N_C(num, beta):
     print("Find Neighbour Candidate for:", num)
     d = dir + "\\" + str(num) + "\\"
     # print(d)
@@ -34,7 +34,6 @@ def N_C(num):
 
     #print(n2)
 
-    beta = 5
 
     N_candidate = []
 
