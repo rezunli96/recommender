@@ -12,17 +12,15 @@ This file finds beta v for u such that with smallest dis[u][v]
 
 dir = ".\\result"
 
-test_num = 100
 
 
-beta = 20
 
 
 K = 10
 
-def find_N(num):
+def find_N(num, beta):
     d = dir + "\\" + str(num) + "\\"
-    print(d)
+    # print(d)
     if not os.path.exists(d):
         os.makedirs(d)
 
@@ -46,6 +44,3 @@ def find_N(num):
     pickle.dump(N, f)
     f.close()
 
-
-for i in range(test_num):
-    find_N(i)

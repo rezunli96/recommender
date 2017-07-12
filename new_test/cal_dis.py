@@ -14,7 +14,7 @@ This file calculate Top-K distance among all pairs of (u, v) from ground-truth a
 
 dir = ".\\result"
 
-test_num = 100
+test_num = 1
 
 
 K = 10 # K in Top-K
@@ -62,5 +62,3 @@ def cal_dis(num):
     pickle.dump(dis, f)
     f.close()
 
-for i in range(test_num):
-    cal_dis(i)

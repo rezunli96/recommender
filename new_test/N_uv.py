@@ -15,11 +15,10 @@ This file compute N(u, v) in MR algorithm, i.e., all item commonly rated by u an
 
 dir = ".\\result"
 
-test_num = 1
 
 def N(num):
     d = dir + "\\" + str(num) + "\\"
-    print(d)
+    print("Finding Commonly Rated Item for subsample ", num)
     if not os.path.exists(d):
         os.makedirs(d)
 
@@ -44,9 +43,6 @@ def N(num):
 
     pickle.dump(N, f)
     f.close()
-
-for i in range(test_num):
-    N(i)
 
 
 

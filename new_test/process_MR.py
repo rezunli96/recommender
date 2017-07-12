@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import math
 import os
-from metric import distance1, kendall_tau
+from metric import distance1, distance2, kendall_tau, KEN
 
 dir = ".\\result\\"
 
@@ -67,11 +67,11 @@ def Multi_Rank(k, H, true_rank, alg, R, N_C):
                 if(H[i, u] != -99 and H[j, u] != -99):
                     # print(u, i, j)
                     sigma[i] += (H[i, u] > H[j ,u]) + np.random.randint(2) * (H[i, u] == H[j ,u])
-                    sigma[j] += 1 - sigma[i]
+                    sigma[j] += 1 - (H[i, u] > H[j ,u]) + np.random.randint(2) * (H[i, u] == H[j ,u])
                 else:
                     #print((u, i, j))
                     sigma[i] += Pairwise_Rank(u, i, j, k, alg, H, R, N_C)
-                    sigma[j] += 1 - sigma[i]
+                    sigma[j] += 1 - (H[i, u] > H[j ,u]) + np.random.randint(2) * (H[i, u] == H[j ,u])
 
 
         D = list(zip(sigma, range(len(sigma))))
@@ -81,25 +81,23 @@ def Multi_Rank(k, H, true_rank, alg, R, N_C):
         res = [x[1] for x in D]
         dis[u] = distance1(true_rank[u], res, K)
         ken[u] = kendall_tau(true_rank[u], res)
+        #print(ken[u])
         #print(true_rank[u])
         #print(res)
         #print("\n")
-    print("kendall_tau for MR: ", np.mean(ken), (np.var(ken)))
-    return dis
+    #print("kendall_tau for MR: ", np.mean(ken), (np.var(ken)))
+    return dis, ken
 
 
-
-
-
-def process_MR(num, alg): # alg is the version of MR algorithm, it may be MR, MRW, MR_realvote or MRW_realvote
+def process_MR(num, alg, k): # alg is the version of MR algorithm, it may be MR, MRW, MR_realvote or MRW_realvote
 
     dir_t = dir + str(num) + "\\"
 
     dir_res = dir_t + alg + "\\"
 
 
-    if not os.path.exists(dir_res):
-        os.makedirs(dir_res)
+    if not os.path.exists(dir_t):
+        os.makedirs(dir_t)
 
 
     f = open(dir_t + "train_data.pkl", 'rb')
@@ -119,19 +117,12 @@ def process_MR(num, alg): # alg is the version of MR algorithm, it may be MR, MR
     true_rank = pickle.load(f)
     f.close()
 
-    n2 = len(H[0])
-    n1 = len(H)
-
-    k = 20
-
-
-    dis = Multi_Rank(k, H, true_rank, alg, R, N_C)
+    dis, ken = Multi_Rank(k, H, true_rank, alg, R, N_C)
     f = open(dir_t + "result_"+alg + ".pkl", 'wb')
     pickle.dump(dis, f)
     f.close()
 
-
-    return dis
+    return dis, ken
 
 
 

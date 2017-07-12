@@ -16,7 +16,7 @@ This file generates item_beat.pkl. Where item_beat[i, u] is the fraction of item
 
 dir = ".\\result"
 
-test_num = 100
+test_num = 1
 
 def item_beat(num):
     d = dir + "\\" + str(num) + "\\"
@@ -45,5 +45,3 @@ def item_beat(num):
     f.close()
 
 
-for i in range(test_num):
-    item_beat(i)

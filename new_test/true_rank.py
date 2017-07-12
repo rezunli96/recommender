@@ -20,12 +20,9 @@ meaning for user u, item 0 ranks 3 highest, item 1 ranks 2 highest.......
 
 dir = ".\\result"
 
-test_num = 1
-
-
 def cal_true(num):
 
-    print(num)
+    print("Calculating True Ranking for ",  num)
     d = dir + "\\" + str(num) + "\\"
     # print(d)
     if not os.path.exists(d):
@@ -53,16 +50,10 @@ def cal_true(num):
         # print(res)
         true_rank.append(res)
 
-
     # print(true_rank)
     f = open(d + "true_rank.pkl", "wb")
     pickle.dump(true_rank, f)
     f.close()
-
-
-
-for i in range(test_num):
-    cal_true(i)
 
 
 
