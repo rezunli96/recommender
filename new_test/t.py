@@ -12,8 +12,5 @@ a = pickle.load(f)
 
 f.close()
 
-for i in range(len(a)):
-    for j in range(len(a[0])):
-        print(a[i, j])
 
 print(a.shape)

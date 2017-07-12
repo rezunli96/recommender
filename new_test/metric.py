@@ -22,6 +22,20 @@ def distance1(X, Y, K):
 
 
 
+
+def KEN(x, y):
+    n = len(x)
+    pair = 0
+    for j in range(n):
+        for i in range(j):
+            if((x[i] < x[j] and y[i] > y[j]) or (x[i] > x[j] and y[i] < y[j])):
+                pair += 1
+    return (2 * pair/(n * (n - 1 )))
+
+
+
+
+
 def kendall_tau(x, y):
     n = 0
     d1 = 0

@@ -9,18 +9,11 @@ This file compute R(u, v) in MR algorithm.
 
 
 
-
-
-
-
-
-
 dir = ".\\result"
 
-test_num = 1
 
 def R(num):
-    print(num)
+    print("Finding Ruv for ", num)
     d = dir + "\\" + str(num) + "\\"
     #print(d)
     if not os.path.exists(d):
@@ -62,10 +55,6 @@ def R(num):
     pickle.dump(R_mat, f)
     f.close()
     #print(R_mat)
-
-
-for i in range(test_num):
-    R(i)
 
 
 
