@@ -7,6 +7,5 @@ from R_uv import R_C
 
 
 def preprocess_MR(num, beta):
-    N(num)
     N_C(num, beta)
     R_C(num)

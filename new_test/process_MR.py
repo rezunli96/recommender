@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import math
 import os
-from metric import distance1, distance2, kendall_tau, KEN
+from metric import distance1, distance2, distance2_with_rate, distance2_with_weight, kendall_tau, KEN
 
 dir = ".\\result\\"
 
@@ -54,7 +54,7 @@ def Pairwise_Rank(u, i, j, k, alg, H, R, N_C):
 
 
 
-def Multi_Rank(k, H, true_rank, alg, R, N_C):
+def Multi_Rank(k, H, true_rank, alg, R, N_C, K):
     n1 = len(H)
     n2 = len(H[0])
     dis = np.zeros(n2)
@@ -76,20 +76,29 @@ def Multi_Rank(k, H, true_rank, alg, R, N_C):
 
         D = list(zip(sigma, range(len(sigma))))
         D.sort(key=lambda x: x[0], reverse=True)
-        D = list(zip([x[1] for x in D], range(1, len(D) + 1)))
-        D.sort(key=lambda x: x[0])
+
         res = [x[1] for x in D]
-        dis[u] = distance1(true_rank[u], res, K)
-        ken[u] = kendall_tau(true_rank[u], res)
+        output_rank = {}
+        for i in range(len(res)):
+            if(i < K): output_rank[res[i]] = i + 1
+            else: output_rank[res[i]] = K + 1
+
+        #D = list(zip([x[1] for x in D], range(1, len(D) + 1)))
+        #D.sort(key=lambda x: x[0])
+        #res = [x[1] for x in D]
+        #dis[u] = distance2(true_rank[u], output_rank)
+
+        dis[u] = distance2_with_weight(true_rank[u], output_rank, K)
+        #ken[u] = kendall_tau(true_rank[u], res)
         #print(ken[u])
         #print(true_rank[u])
         #print(res)
         #print("\n")
     #print("kendall_tau for MR: ", np.mean(ken), (np.var(ken)))
-    return dis, ken
+    return dis
 
 
-def process_MR(num, alg, k): # alg is the version of MR algorithm, it may be MR, MRW, MR_realvote or MRW_realvote
+def process_MR(num, alg, k, K): # alg is the version of MR algorithm, it may be MR, MRW, MR_realvote or MRW_realvote
 
     dir_t = dir + str(num) + "\\"
 
@@ -105,6 +114,7 @@ def process_MR(num, alg, k): # alg is the version of MR algorithm, it may be MR,
     f.close()
 
 
+
     f = open(dir_t +"Ruv_train.pkl", 'rb')
     R = pickle.load(f)
     f.close()
@@ -117,12 +127,12 @@ def process_MR(num, alg, k): # alg is the version of MR algorithm, it may be MR,
     true_rank = pickle.load(f)
     f.close()
 
-    dis, ken = Multi_Rank(k, H, true_rank, alg, R, N_C)
-    f = open(dir_t + "result_"+alg + ".pkl", 'wb')
-    pickle.dump(dis, f)
-    f.close()
+    dis = Multi_Rank(k, H, true_rank, alg, R, N_C, K)
+    #f = open(dir_t + "result_"+alg + ".pkl", 'wb')
+    #pickle.dump(dis, f)
+    #f.close()
 
-    return dis, ken
+    return dis
 
 
 

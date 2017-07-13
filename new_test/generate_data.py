@@ -11,7 +11,6 @@ stores in directory .\\result\\i
 
 dir = ".\\result"
 
-test_num = 10 # total number of test samples
 
 def generate_data(num, full_data):
     print("Generating dataset for ",num)
@@ -37,7 +36,7 @@ def generate_data(num, full_data):
     for i in range(n1):
         for j in range(n2):
             rnd = random.uniform(0, 100)
-            if (rnd <= 20 and sampled_data[i, j] != -99):   # split the dataset 40% into the training set
+            if (rnd <= 40 and sampled_data[i, j] != -99):   # split the dataset 40% into the training set
                 train[i, j] = sampled_data[i, j]
             '''
             elif (rnd <= 55):
@@ -58,5 +57,6 @@ def generate_data(num, full_data):
     print(train.shape)
     f0.close()
     f1.close()
+    print("Generating Finished.")
 
 

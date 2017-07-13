@@ -1,9 +1,9 @@
 import numpy as np
 import pickle
 import math
-
+from cal_freq import cal_freq
 import os
-from metric import distance1, spearman_rho, kendall_tau
+from metric import distance1, distance2, distance2_with_rate, distance2_with_weight, spearman_rho, kendall_tau
 
 '''
 This file calculate Top-K distance among all pairs of (u, v) from ground-truth and stored it in dis[u][v]
@@ -17,19 +17,20 @@ dir = ".\\result"
 test_num = 1
 
 
-K = 10 # K in Top-K
 
-def cal_dis(num):
+def cal_dis(num, K):
     d = dir + "\\" + str(num) + "\\"
-    print(d)
+    #print(d)
+    print("Calculating distance in New Algorithm for subsample", num)
     if not os.path.exists(d):
         os.makedirs(d)
 
-    f = open(d + "sampled_data.pkl", 'rb')
+    f = open(d + "train_data.pkl", 'rb')
     data = pickle.load(f)
     f.close()
-    f = open(d + "true_rank.pkl", "rb")
-    true_rank = pickle.load(f)
+    # freq = cal_freq(num)
+    f = open(d + "observed_rank.pkl", "rb")
+    observed_rank = pickle.load(f)
     f.close()
     n2 = len(data[0])
     n1 = len(data)
@@ -39,10 +40,10 @@ def cal_dis(num):
     for u in range(n2):
         # print(u)
         for v in range(n2):
-            u_rank = true_rank[u]
-            v_rank = true_rank[v]
-            dis[u][v] = distance1(u_rank, v_rank, K)
-
+            u_rank = observed_rank[u]
+            v_rank = observed_rank[v]
+            dis[u][v] = distance2_with_weight(u_rank, v_rank, K)
+            #dis[u][v] = distance2_with_rate(u_rank, v_rank, data[:, u])
 
             #print(len(u_rank), len(v_rank))
             '''
@@ -61,4 +62,5 @@ def cal_dis(num):
         #print(dis[u])
     pickle.dump(dis, f)
     f.close()
+    print("Finish Calculating")
 

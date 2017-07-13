@@ -6,11 +6,4 @@ import os
 
 
 
-f = open("full_data.pkl", "rb")
-
-a = pickle.load(f)
-
-f.close()
-
-
-print(a)
+print(set([1,2,3]))

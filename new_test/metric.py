@@ -23,17 +23,40 @@ def distance1(X, Y, K):
 
 
 
-
-
-def distance2(X, Y, K):
-
+def distance2(X, Y):
+    n = 0
     d = 0
-    for i in range(len(X)):
-        x = X[i] if X[i] <= K else K + 1
-        y = Y[i] if Y[i] <= K else K + 1
-        d += abs(x - y)/(i + 1)
-    return d
+    for i in X.keys():
+        if i in Y.keys():
+            n += 1
+            d += abs(X[i] - Y[i])
 
+    if(n == 0): return 9999999
+    return d/n
+
+
+def distance2_with_weight(X, Y, K):
+    n = 0
+    d = 0
+    for i in X.keys():
+        if i in Y.keys():
+            n += 1
+            if(X[i] == K + 1): continue
+            d += (1/(X[i])) * abs(X[i] - Y[i])
+
+    if(n == 0): return 9999999
+    return d/n
+
+def distance2_with_rate(X, Y, H):
+    n = 0
+    d = 0
+    for i in X.keys():
+        if i in Y.keys():
+            n += 1
+            d += (H[i]) * abs(X[i] - Y[i])
+
+    if(n == 0): return 9999999
+    return d/n
 
 
 

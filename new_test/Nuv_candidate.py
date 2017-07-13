@@ -50,4 +50,5 @@ def N_C(num, beta):
 
     pickle.dump(N_candidate, f)
     f.close()
+    print("Finished.")
 
