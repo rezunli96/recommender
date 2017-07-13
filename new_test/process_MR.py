@@ -76,17 +76,24 @@ def Multi_Rank(k, H, true_rank, alg, R, N_C):
 
         D = list(zip(sigma, range(len(sigma))))
         D.sort(key=lambda x: x[0], reverse=True)
-        D = list(zip([x[1] for x in D], range(1, len(D) + 1)))
-        D.sort(key=lambda x: x[0])
+
         res = [x[1] for x in D]
-        dis[u] = distance1(true_rank[u], res, K)
-        ken[u] = kendall_tau(true_rank[u], res)
+        output_rank = {}
+        for i in range(len(res)):
+            if(i < K): output_rank[res[i]] = i + 1
+            else: output_rank[res[i]] = K + 1
+
+        #D = list(zip([x[1] for x in D], range(1, len(D) + 1)))
+        #D.sort(key=lambda x: x[0])
+        #res = [x[1] for x in D]
+        dis[u] = distance2(true_rank[u], output_rank)
+        #ken[u] = kendall_tau(true_rank[u], res)
         #print(ken[u])
         #print(true_rank[u])
         #print(res)
         #print("\n")
     #print("kendall_tau for MR: ", np.mean(ken), (np.var(ken)))
-    return dis, ken
+    return dis
 
 
 def process_MR(num, alg, k): # alg is the version of MR algorithm, it may be MR, MRW, MR_realvote or MRW_realvote

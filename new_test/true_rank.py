@@ -20,7 +20,7 @@ meaning for user u, item 0 ranks 3 highest, item 1 ranks 2 highest.......
 
 dir = ".\\result"
 
-def cal_true(num):
+def cal_true(num, K):
 
     print("Calculating True Ranking for ",  num)
     d = dir + "\\" + str(num) + "\\"
@@ -44,11 +44,17 @@ def cal_true(num):
 
         res = list(zip(res, range(len(res))))  # now res = [(rate(u, 0), 0), (rate(u, 1), 1).......]
         res.sort(key=lambda x: x[0], reverse=True) # u is now sorted decreasingly with respected to rate
-        res = list(zip([x[1] for x in res], range(1, len(res) + 1)))  # add rank number for each item
-        res.sort(key=lambda x: x[0]) # rearrange item with respect to their index
+        # res = list(zip([x[1] for x in res], range(1, len(res) + 1)))  # add rank number for each item
+        # res.sort(key=lambda x: x[0]) # rearrange item with respect to their index
         res = [x[1] for x in res]
+        rank = {}
+        for i in range(len(res)):
+            if(i < K):
+                rank[res[i]] = i + 1
+            else:
+                rank[res[i]] = K + 1
         # print(res)
-        true_rank.append(res)
+        true_rank.append(rank)
 
     # print(true_rank)
     f = open(d + "true_rank.pkl", "wb")

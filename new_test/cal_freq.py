@@ -1,7 +1,19 @@
 import numpy as np
 import pickle
+import os
 
-def cal_freq(H):
+dir = ".\\result"
+
+
+def cal_freq(num):
+    d = dir + "\\" + str(num) + "\\"
+    # print(d)
+    if not os.path.exists(d):
+        os.makedirs(d)
+
+    f = open(d + "train_data.pkl", 'rb')
+    H = pickle.load(f)
+    f.close()
     n1 = len(H)
     n2 = len(H[0])
     total = 0

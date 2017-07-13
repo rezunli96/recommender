@@ -5,39 +5,40 @@ import numpy as np
 import pickle
 from generate_data import generate_data
 from true_rank import cal_true
+from preprocess_New import preprocess_new
+from process_New import process_New
+
 
 '''
+
 Main file to run different algorithm on batch of sampled dataset
+
+
 '''
+
 
 test_num = 1
+
+beta_new = 20
+
+K = 10
+
+k = 10
+
+beta_MR = 5
 
 def main():
     f = open("full_data.pkl", "rb")
     full_data = pickle.load(f)
     f.close()
 
-    m = 0
-    opt_beta = 0
-    opt_k = 0
-
-
     for i in range(test_num):
         generate_data(i, full_data)
-        cal_true(i)
-        for k in range(5, 51, 5):
-            for beta in range(2, 21):
-                preprocess_MR(i, beta)
-                dis, ken = process_MR(i, "MRW", k)
-                if(np.mean(ken) > m):
-                    m = np.mean(ken)
-                    opt_beta = beta
-                    opt_k = k
-
-                print("For", (k, beta), "kendaull's tau is", np.mean(ken))
-
-                #print("distance metric for ", i, "is", np.mean(dis))
-                #print("Kendaull's tau for ", i, "is", np.mean(ken))
-
-    print(opt_k, opt_beta, m)
+        cal_true(i, K)
+        preprocess_new(i, beta_new ,K)
+        dis_new = process_New(i, K)
+        print(np.mean(dis_new))
+        preprocess_MR(i, beta_MR)
+        dis_MR = process_MR(i, "MRW", k)
+        print(np.mean(dis_MR))
 main()
