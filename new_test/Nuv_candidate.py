@@ -15,7 +15,7 @@ dir = ".\\result"
 
 
 def N_C(num, beta):
-    print("Find Neighbour Candidate for:", num)
+    #print("Find Neighbour Candidate for:", num)
     d = dir + "\\" + str(num) + "\\"
     # print(d)
     if not os.path.exists(d):
@@ -50,5 +50,5 @@ def N_C(num, beta):
 
     pickle.dump(N_candidate, f)
     f.close()
-    print("Finished.")
+    #print("Finished.")
 

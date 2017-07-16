@@ -19,7 +19,7 @@ dir = ".\\result"
 test_num = 1
 
 def item_beat(num):
-    print("Finding item beat ratio for subsample", num)
+    #print("Finding item beat ratio for subsample", num)
     d = dir + "\\" + str(num) + "\\"
     #print(d)
     if not os.path.exists(d):
@@ -44,6 +44,6 @@ def item_beat(num):
     f = open(d + "item_beat.pkl", "wb")
     pickle.dump(res, f)
     f.close()
-    print("Finished.")
+    #print("Finished.")
 
 

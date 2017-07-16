@@ -21,7 +21,7 @@ test_num = 1
 def cal_dis(num, K):
     d = dir + "\\" + str(num) + "\\"
     #print(d)
-    print("Calculating distance in New Algorithm for subsample", num)
+    #print("Calculating distance in New Algorithm for subsample", num)
     if not os.path.exists(d):
         os.makedirs(d)
 
@@ -62,5 +62,5 @@ def cal_dis(num, K):
         #print(dis[u])
     pickle.dump(dis, f)
     f.close()
-    print("Finish Calculating")
+    #print("Finish Calculating")
 

@@ -6,7 +6,7 @@ from metric import distance1, distance2, distance2_with_rate, distance2_with_wei
 
 dir = ".\\result\\"
 
-K = 10
+
 
 def W(i, j, u, H, N_C):
     res = []

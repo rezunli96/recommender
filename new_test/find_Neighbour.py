@@ -15,7 +15,7 @@ dir = ".\\result"
 
 def find_Neighbour(num, beta, k):
     d = dir + "\\" + str(num) + "\\"
-    print("Finding possible neighbourhood in new algorithm for subsample", num,"with", (beta,k))
+    #print("Finding possible neighbourhood in new algorithm for subsample", num,"with", (beta,k))
     # print(d)
     if not os.path.exists(d):
         os.makedirs(d)
@@ -52,4 +52,4 @@ def find_Neighbour(num, beta, k):
     f = open(d + "neighbour_in_new.pkl", "wb")
     pickle.dump(N, f)
     f.close()
-    print("Finishing Calculating.")
+    #print("Finishing Calculating.")

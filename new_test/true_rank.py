@@ -22,7 +22,7 @@ dir = ".\\result"
 
 def cal_true(num, K):
 
-    print("Calculating True Ranking for ",  num)
+    #print("Calculating True Ranking for ",  num)
     d = dir + "\\" + str(num) + "\\"
     # print(d)
     if not os.path.exists(d):
@@ -60,7 +60,7 @@ def cal_true(num, K):
     f = open(d + "true_rank.pkl", "wb")
     pickle.dump(true_rank, f)
     f.close()
-    print("Finshed.")
+    #print("Finshed.")
 
 
 
