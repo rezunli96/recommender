@@ -5,10 +5,10 @@ from find_observed_rank import find_observed_rank
 from cal_freq import cal_freq
 
 
-def preprocess_new(num, beta, K):
+def preprocess_new(num, beta, k , K):
     freq = cal_freq(num)
     find_observed_rank(num, K, freq)
-    cal_dis(num)
-    find_Neighbour(num, beta)
+    cal_dis(num, K)
+    find_Neighbour(num, beta, k)
     item_beat(num)
 

@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import pickle
-from metric import distance2
+from metric import distance2, distance2_with_rate, distance2_with_weight
 
 
 dir = ".\\result"
@@ -19,6 +19,13 @@ def process_New(num, K):
     train_data = pickle.load(f)
 
     f.close()
+
+    f = open(d + "sampled_data.pkl", "rb")
+
+    full_data = pickle.load(f)
+
+    f.close()
+
 
     n1 = len(train_data)
     n2 = len(train_data[0])
@@ -64,7 +71,8 @@ def process_New(num, K):
         for i in range(len(res)):
             if(i < K): output_rank[res[i]] = i + 1
             else: output_rank[res[i]] = K + 1
-        dis[u] = distance2(true_rank[u], output_rank)
+        dis[u] = distance2_with_weight(true_rank[u], output_rank, K)
+        #dis[u] = distance2_with_rate(true_rank[u], output_rank, full_data[:, u])
 
         #rank.append(res)
 

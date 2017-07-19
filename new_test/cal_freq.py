@@ -20,5 +20,5 @@ def cal_freq(num):
     for i in range(n1):
         for j in range(n2):
             if(H[i, j] != -99): total += 1
-
+    #print("calculating observed ratio for subsample",num, "is ",total/(n1 * n2))
     return total/(n1 * n2)

@@ -14,6 +14,7 @@ dir = ".\\result"
 
 
 def find_observed_rank(num, K, freq):
+    #print("Finding observed rank for subsample", num)
     d = dir + "\\" + str(num) + "\\"
     # print(d)
     if not os.path.exists(d):
@@ -47,5 +48,5 @@ def find_observed_rank(num, K, freq):
     f = open(d + "observed_rank.pkl", "wb")
 
     pickle.dump(observed_rank, f)
-
+    #print("Finish Calculating.")
     f.close()

@@ -18,7 +18,7 @@ dir = ".\\result"
 
 def N(num):
     d = dir + "\\" + str(num) + "\\"
-    print("Finding Commonly Rated Item for subsample ", num)
+    #print("Finding Commonly Rated Item in train set for subsample ", num)
     if not os.path.exists(d):
         os.makedirs(d)
 
@@ -40,7 +40,7 @@ def N(num):
             N_u.append(N_uv)
             #print(len(N_uv))
         N.append(N_u)
-
+    #print("Finished.")
     pickle.dump(N, f)
     f.close()
 

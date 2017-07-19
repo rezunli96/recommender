@@ -31,7 +31,7 @@ def R(u, v, H, N):
 
 
 def R_C(num):
-    print("Finding Ruv for ", num)
+    #print("Finding Ruv for ", num)
     d = dir + "\\" + str(num) + "\\"
     #print(d)
     if not os.path.exists(d):
