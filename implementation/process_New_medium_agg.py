@@ -2,12 +2,12 @@ import numpy as np
 import os
 import pickle
 from metric import new_distance, kendall_tau
-
+from find_Neighbour_New import find_Neighbour_New
 
 dir = ".\\result"
 
 
-def process_New_medium_agg(num, K):
+def process_New_medium_agg(num, K, beta, k):
     d = dir + "\\" + str(num) + "\\"  # directory to store file
     # print(d)
     if not os.path.exists(d):
@@ -30,11 +30,10 @@ def process_New_medium_agg(num, K):
 
     f.close()
 
-    f = open(d + "neighbour_in_new.pkl", "rb")
 
-    N_u = pickle.load(f)
+    N_u = find_Neighbour_New(num, beta, k)
 
-    f.close()
+
 
     f = open(d + "true_rank.pkl", "rb")
 
@@ -44,7 +43,7 @@ def process_New_medium_agg(num, K):
 
 
     dis = np.zeros(n2)
-    ken = np.zeros(n2)
+    #ken = np.zeros(n2)
 
     for u in range(n2):
         sigma = [0] * n1
@@ -71,8 +70,8 @@ def process_New_medium_agg(num, K):
         a = [output_rank[i] for i in range(100)]
         b = [true_rank[u][j] for j in range(100)]
         dis[u] = new_distance(true_rank[u], output_rank, K)
-        ken[u] = kendall_tau(a, b)
+        #ken[u] = kendall_tau(a, b)
 
 
-    print(np.mean(ken))
+    #print(np.mean(ken))
     return dis

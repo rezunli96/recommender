@@ -2,12 +2,13 @@ import numpy as np
 import os
 import pickle
 from metric import new_distance
-
+import math
+from find_Neighbour_New import find_Neighbour_New
 
 dir = ".\\result"
 
 
-def process_New_average_agg(num, K):
+def process_New_average_agg(num, K, beta, k, lam):
     d = dir + "\\" + str(num) + "\\"  # directory to store file
     # print(d)
     if not os.path.exists(d):
@@ -30,11 +31,9 @@ def process_New_average_agg(num, K):
 
     f.close()
 
-    f = open(d + "neighbour_in_new.pkl", "rb")
 
-    N_u = pickle.load(f)
+    N_u = find_Neighbour_New(num, beta, k)
 
-    f.close()
 
     f = open(d + "true_rank.pkl", "rb")
 
@@ -42,8 +41,12 @@ def process_New_average_agg(num, K):
 
     f.close()
 
-
+    f = open(d + "dis_uv_new.pkl", "rb")
+    dis_uv = pickle.load(f)
+    f.close()
     dis = np.zeros(n2)
+
+
 
     for u in range(n2):
         sigma = [0] * n1
@@ -52,9 +55,10 @@ def process_New_average_agg(num, K):
             total = 0
             for v in N_u[u]:
                 if(train_data[i, v] != -99):
-                    x += item_beat[i, v]
-                    total += 1
+                    x += math.exp(-lam * dis_uv[u][v]) * item_beat[i, v]
+                    total += math.exp(-lam * dis_uv[u][v])
             if(total): sigma[i] = x/total
+            #print(sigma[i])
         D = list(zip(sigma, range(len(sigma))))
         D.sort(key=lambda x: x[0], reverse=True)
         res = [x[1] for x in D]
@@ -63,7 +67,7 @@ def process_New_average_agg(num, K):
             output_rank[res[i]] = i + 1
             #if(i < K): output_rank[res[i]] = i + 1
             #else: output_rank[res[i]] = K + 1
-        #dis[u] = new_distance(true_rank[u], output_rank, K)
+        dis[u] = new_distance(true_rank[u], output_rank, K)
     return dis
 
 

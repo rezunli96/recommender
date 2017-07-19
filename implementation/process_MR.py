@@ -70,8 +70,9 @@ def Multi_Rank(k, H, true_rank, alg, R, N_C, K):
                     sigma[j] += 1 - (H[i, u] > H[j ,u]) + np.random.randint(2) * (H[i, u] == H[j ,u])
                 else:
                     #print((u, i, j))
-                    sigma[i] += Pairwise_Rank(u, i, j, k, alg, H, R, N_C)
-                    sigma[j] += 1 - (H[i, u] > H[j ,u]) + np.random.randint(2) * (H[i, u] == H[j ,u])
+                    tmp = Pairwise_Rank(u, i, j, k, alg, H, R, N_C)
+                    sigma[i] += tmp
+                    sigma[j] += 1 - tmp
 
 
         D = list(zip(sigma, range(len(sigma))))

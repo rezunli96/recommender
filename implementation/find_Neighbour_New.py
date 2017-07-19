@@ -44,7 +44,5 @@ def find_Neighbour_New(num, beta, k):
         res = [v for v in res if len(N_uv[u][v]) >= beta][:k]
         N.append(res)
 
-    f = open(d + "neighbour_in_new.pkl", "wb")
-    pickle.dump(N, f)
-    f.close()
+    return N
     #print("Finishing Calculating.")

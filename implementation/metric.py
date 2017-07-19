@@ -12,7 +12,8 @@ item 0 ranks the 3th highest, item 1 ranks the 4 th......
 '''
 
 def delta(j, K):
-    if(j <= K): return 1
+    if(j < K): return 1
+    elif (j == K): return 5
     else: return 0
 
 

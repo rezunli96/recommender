@@ -9,6 +9,6 @@ def preprocess_new(num, beta, k , K):
     freq = cal_freq(num)
     find_observed_rank_New(num, freq)
     cal_dis_New(num, K)
-    find_Neighbour_New(num, beta, k)
+    #find_Neighbour_New(num, beta, k)
     item_beat_New(num)
 

@@ -31,10 +31,10 @@ def find_Common_Users(num):
     for i in range(n1):
         #print(u)
         N_i = []
-        for v in range(n1):
+        for j in range(n1):
             N_ij = []
             for u in range(n2):
-                if (train[i, u] != -99 and train[i, v] != -99):  N_ij.append(u)
+                if (train[i, u] != -99 and train[j, u] != -99):  N_ij.append(u)
             N_i.append(N_ij)
             #print(len(N_uv))
         N.append(N_i)

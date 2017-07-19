@@ -14,7 +14,7 @@ dir = ".\\result"
 
 
 def cal_var_uv(data, d):
-    f = open(d + "Nuv_train.pkl", 'wb')
+    f = open(d + "Nuv_train.pkl", 'rb')
     N_uv = pickle.load(f)
     f.close()
 
@@ -33,13 +33,13 @@ def cal_var_uv(data, d):
                             de += (data[N_uv[u][v][i], u] - data[N_uv[u][v][i], v] - (data[N_uv[u][v][j], u] - data[N_uv[u][v][j], v])) ** 2
                     s_uv[u, v] = de/(2 * len(N_uv[u][v]) * (len(N_uv[u][v]) - 1))
 
-    f = open("s_uv_LA.pkl", "wb")
+    f = open(d + "s_uv_LA.pkl", "wb")
     pickle.dump(s_uv, f)
     f.close()
 
 
 def cal_var_ij(data, d):
-    f = open(d + "Nij_train.pkl", 'wb')
+    f = open(d + "Nij_train.pkl", 'rb')
     N_ij = pickle.load(f)
     f.close()
 
@@ -59,7 +59,7 @@ def cal_var_ij(data, d):
                             data[i, N_ij[i][j][v]] - data[j, N_ij[i][j][v]])) ** 2
                     s_ij[i, j] = de / (2 * len(N_ij[i][j]) * (len(N_ij[i][j]) - 1))
 
-    f = open("s_ij_LA.pkl", "wb")
+    f = open(d + "s_ij_LA.pkl", "wb")
     pickle.dump(s_ij, f)
     f.close()
 
