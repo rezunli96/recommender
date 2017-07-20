@@ -3,6 +3,7 @@ import os
 import pickle
 from metric import new_distance
 import math
+from find_B_beta_LA import find_B_beta_LA
 
 dir = ".\\result"
 
@@ -27,11 +28,11 @@ def process_LA(num, K, lam):
     train_data = pickle.load(f)
 
     f.close()
-
+    '''
     f = open(d + "B_LA.pkl", "rb")
     B = pickle.load(f)
     f.close()
-
+    '''
 
     n1 = len(train_data)
     n2 = len(train_data[0])
@@ -48,6 +49,7 @@ def process_LA(num, K, lam):
 
     f.close()
 
+    s_ui, s_iu = find_B_beta_LA(num)
 
     f = open(d + "true_rank.pkl", "rb")
 
@@ -63,10 +65,12 @@ def process_LA(num, K, lam):
             else:
                 nu = 0
                 de = 0
-                for (j, v) in B[i][u]:
-                    w = W(u, i, v, j, lam, s_uv, s_ij)
-                    nu += w
-                    de += w * (train_data[j, u] + train_data[i, v] - train_data[j, v])
+                for j in s_iu[u][i]:
+                    for v in s_ui[i][u]:
+                        if(train_data[j, v] == -99): continue
+                        w = W(u, i, v, j, lam, s_uv, s_ij)
+                        nu += w
+                        de += w * (train_data[j, u] + train_data[i, v] - train_data[j, v])
                 if(nu): sigma[i] = de/nu
 
         D = list(zip(sigma, range(len(sigma))))

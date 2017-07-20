@@ -66,8 +66,11 @@ def find_B_beta_LA(num):
     s_ui = find_beta_ovlp_i(data, d)
     s_iu = find_beta_ovlp_u(data, d)
 
-    B = []
+    return s_ui, s_iu
 
+    '''
+    B = []
+    
     for i in range(n1):
         B_i = []
         for u in range(n2):
@@ -82,4 +85,4 @@ def find_B_beta_LA(num):
     f = open(d + "B_LA.pkl", "wb")
     pickle.dump(B, f)
     f.close()
-            
+    '''

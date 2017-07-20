@@ -29,7 +29,7 @@ def main():
 
 
 
-    for num in range(4):
+    for num in range(3, 4):
         opt_beta = 0
         opt_lam = 0
         opt = 99
