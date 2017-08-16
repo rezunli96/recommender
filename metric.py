@@ -1,19 +1,10 @@
 import numpy as np
-import pickle
 import math
-import os
 
-
-'''
-This file store possible top-K distance function for two rank array. For example, X = [3, 4, 1, 5 .....], meaning in X
-
-item 0 ranks the 3th highest, item 1 ranks the 4 th......
-
-'''
 
 def delta(j, K):
-    if(j < K): return 1
-    elif (j == K): return 5
+    if(j <= K): return 1/j
+    #elif (j == K): return K/2
     else: return 0
 
 

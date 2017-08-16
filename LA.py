@@ -3,7 +3,7 @@ import os
 import pickle
 from metric import new_distance
 import math
-from find_B_beta_LA import find_B_beta_LA
+from utils import find_B_beta_LA
 
 dir = ".\\result"
 
@@ -17,8 +17,8 @@ def W(u, i, v, j, lam, s_uv, s_ij):
 
 
 
-def process_LA(num, K, lam):
-    d = dir + "\\" + str(num) + "\\"  # directory to store file
+def process_LA(di, K, lam):
+    d = dir + "\\" + di + "\\"  # directory to store file
     # print(d)
     if not os.path.exists(d):
         os.makedirs(d)
@@ -49,7 +49,7 @@ def process_LA(num, K, lam):
 
     f.close()
 
-    s_ui, s_iu = find_B_beta_LA(num)
+    s_ui, s_iu = find_B_beta_LA(di)
 
     f = open(d + "true_rank.pkl", "rb")
 
@@ -67,6 +67,7 @@ def process_LA(num, K, lam):
                 de = 0
                 for j in s_iu[u][i]:
                     for v in s_ui[i][u]:
+                        #if(u == v or j == i): continue
                         if(train_data[j, v] == -99): continue
                         w = W(u, i, v, j, lam, s_uv, s_ij)
                         nu += w
