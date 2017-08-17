@@ -1,6 +1,7 @@
 from utils import *
 from LA import process_LA
 from MR import process_MR
+from RMC import process_RMC
 from NEW import process_New_average_agg
 
 '''
@@ -68,6 +69,34 @@ def search_for_LA():
         f.close()
         '''
 
+def search_for_RMC(max_iter):
+    for prob in p:
+        opt_epsilon = 0
+        opt_tau = 0
+        opt = 99
+        for e in range(100):
+            epsilon = e * 0.0001
+            for t in range(0, 31):
+                tau = t * 0.1
+                d = np.zeros(test_num)
+                for num in range(test_num):
+                    di = str(prob) + "\\" + str(num)
+                    dis  = process_RMC(di, epsilon, tau, max_iter, K)
+                    d[num] = np.mean(dis)
+                    #print("In LA for ",(beta, l), "result is", np.mean(d))
+                    #res.append((beta, l, np.mean(d)))
+                if(np.mean(d) < opt):
+                    opt = np.mean(d)
+                    opt_epsilon = epsilon
+                    opt_tau = tau
+                print((epsilon, tau), np.mean(d))
+        print("For prob",prob, "optimal for RMC is",(opt_epsilon,opt_tau),opt)
+        '''
+        f  = open(".\\result\\"+str(prob)+"\\opt_res_RMC.pkl", "wb")
+        pickle.dump(res, f)
+        f.close()
+        '''
+
 def search_for_MRW(version):
     for prob in p:
         opt_beta = 0
@@ -108,7 +137,8 @@ p = [0.1, 0.2, 0.3, 0.4]
 def main():
     generate_all(test_num, p, "jester", 100)
     #search_for_LA()
-    search_for_MRW("MRW")
-    #search_for_NEW()
+    #search_for_MRW("MRW")
+    #search_for_MRW(100)
+    search_for_NEW()
 
 main()
