@@ -83,8 +83,6 @@ def search_for_RMC(max_iter):
                     di = str(prob) + "\\" + str(num)
                     dis  = process_RMC(di, epsilon, tau, max_iter, K)
                     d[num] = np.mean(dis)
-                    #print("In LA for ",(beta, l), "result is", np.mean(d))
-                    #res.append((beta, l, np.mean(d)))
                 if(np.mean(d) < opt):
                     opt = np.mean(d)
                     opt_epsilon = epsilon
@@ -138,7 +136,7 @@ def main():
     generate_all(test_num, p, "jester", 100)
     #search_for_LA()
     #search_for_MRW("MRW")
-    #search_for_MRW(100)
+    #search_for_RMC(100)
     search_for_NEW()
 
 main()
